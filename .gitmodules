@@ -1,0 +1,6 @@
+[submodule "hirespace-client"]
+	path = hirespace-client
+	url = https://github.com/Asna-1994/HireSpace-client.git
+[submodule "hirespace-server"]
+	path = hirespace-server
+	url = https://github.com/Asna-1994/HireSpace-server.git
