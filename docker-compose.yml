@@ -1,20 +1,53 @@
+# version: '3.8'
+# services:
+#   frontend:
+#     build: 
+#       context: ./hirespace-client
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5173:5173"
+#     environment:
+#       - VITE_API_URL=http://localhost:3000
+    
+#   backend:
+#     build:
+#       context: ./hirespace-server
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - MONGODB_URI='mongodb+srv://saydathasna:ZfRWDXnyJWOVjf4U@cluster0.kj6j7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+#       - JWT_SECRET='8ee47e18eaa94bd4e1f20ae47bb1b7c574f0a6efee8872a0604ceb25d3c45b0a643a18f32faf1659f93064a85a863dd765cd8ad39adcc3df78862c676c450933'
+
 version: '3.8'
+
 services:
   frontend:
     build: 
-      context: ./hirespace-client
-      dockerfile: Dockerfile
+      context: ./hirespace-client  # Update path to match your submodule
     ports:
-      - "5173:5173"
+      - "5173:5173"  # Match the Vite dev server port
     environment:
-      - VITE_API_URL=http://localhost:3000
-    
+      - VITE_API_URL=http://localhost:3000  # Update to match backend port
+    depends_on:
+      - backend
+    networks:
+      - hirespace-network
+
   backend:
-    build:
-      context: ./hirespace-server
-      dockerfile: Dockerfile
+    build: 
+      context: ./hirespace-server  # Update path to match your submodule
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Match the backend port
     environment:
-      - MONGODB_URI='mongodb+srv://saydathasna:ZfRWDXnyJWOVjf4U@cluster0.kj6j7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-      - JWT_SECRET='8ee47e18eaa94bd4e1f20ae47bb1b7c574f0a6efee8872a0604ceb25d3c45b0a643a18f32faf1659f93064a85a863dd765cd8ad39adcc3df78862c676c450933'
+      - MONGODB_URI=mongodb+srv://saydathasna:ZfRWDXnyJWOVjf4U@cluster0.kj6j7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=8ee47e18eaa94bd4e1f20ae47bb1b7c574f0a6efee8872a0604ceb25d3c45b0a643a18f32faf1659f93064a85a863dd765cd8ad39adcc3df78862c676c450933
+      - PORT=3000  # Explicitly set the port
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - hirespace-network
+
+networks:
+  hirespace-network:
+    driver: bridge
